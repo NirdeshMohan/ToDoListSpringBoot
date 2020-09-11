@@ -2,6 +2,7 @@ package com.isnit.rest.webservices.restfulwebservices.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -14,8 +15,8 @@ public class UserDAOService {
 	private static int usersCount = 3;
 	static{
 		users.add(new User(1, "Nirdesh", "Mohan", new Date()));
-		users.add(new User(2, "Ishaan", "Sahrma", new Date()));
-		users.add(new User(3, "Nitish", "Sahrma", new Date()));
+		users.add(new User(2, "Ishaan", "Sharma", new Date()));
+		users.add(new User(3, "Nitish", "Sharma", new Date()));
 	};
 	
 	public static List<User> findAll(){
@@ -37,5 +38,17 @@ public class UserDAOService {
 		}
 		users.add(user);
 		return user;
+	}
+	
+	public User delete(int id){
+		Iterator<User> it = users.iterator();
+		while(it.hasNext()) {
+			User user = it.next();
+			if(user.getId() == id) {
+				it.remove();
+				return user;
+			}
+		}
+		return null;
 	}
 }
