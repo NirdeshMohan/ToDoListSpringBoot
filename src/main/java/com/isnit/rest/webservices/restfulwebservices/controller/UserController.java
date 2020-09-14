@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,6 +21,7 @@ import com.isnit.rest.webservices.restfulwebservices.exceptions.UserNotFoundExce
 import com.isnit.rest.webservices.restfulwebservices.model.User;
 
 @RestController
+
 public class UserController {
 	@Autowired
 	private UserDAOService userService;
@@ -33,11 +37,12 @@ public class UserController {
 		if(user == null)
 			throw new UserNotFoundException("id-"+id);
 		
+		
 		return user;
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity saveUsers(@RequestBody User user){
+	public ResponseEntity saveUsers(@Validated @RequestBody User user){
 		User savedUser =  userService.save(user);
 		
 		URI location = ServletUriComponentsBuilder

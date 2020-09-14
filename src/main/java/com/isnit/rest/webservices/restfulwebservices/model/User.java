@@ -2,10 +2,22 @@ package com.isnit.rest.webservices.restfulwebservices.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description="User Details")
 public class User {
+	
 	private Integer id;
+	@Size(min=10, message="First Name should have atleast 2 characters")
 	private String firstName;
+	@Size(min=2, message="Last Name should have atleast 2 characters")
 	private String lastName;
+	@Past
+	@ApiModelProperty(notes="Birthday should be in past")
 	private Date dob;
 	
 	
