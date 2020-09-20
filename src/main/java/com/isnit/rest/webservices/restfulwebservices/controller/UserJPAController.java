@@ -2,6 +2,7 @@ package com.isnit.rest.webservices.restfulwebservices.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,49 +15,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.isnit.rest.webservices.restfulwebservices.dao.UserDAOService;
 import com.isnit.rest.webservices.restfulwebservices.exceptions.UserNotFoundException;
-import com.isnit.rest.webservices.restfulwebservices.model.User;
+import com.isnit.rest.webservices.restfulwebservices.model.JPAUser;
+import com.isnit.rest.webservices.restfulwebservicesrepository.JPAUserRepository;
 
 @RestController
-
-public class UserController {
+public class UserJPAController {
 	@Autowired
-	private UserDAOService userService;
+	private JPAUserRepository userRepository;
 	
-	@GetMapping("/users")
-	public List<User> getAllUsers(){
-		return userService.findAll();
+	@GetMapping("/jpa/users")
+	public List<JPAUser> getAllJPAUsers(){
+		return userRepository.findAll();
 	}
-	
-	@GetMapping("/users/{id}")
-	public User getUsers(@PathVariable int id){
-		User user = userService.findOne(id);
-		if(user == null)
+
+	@GetMapping("/jpa/users/{id}")
+	public Optional<JPAUser>  getJPAUsers(@PathVariable int id){
+		Optional<JPAUser> jpaUser = userRepository.findById(id);
+		
+		if(!jpaUser.isPresent())
 			throw new UserNotFoundException("id-"+id);
 		
 		
-		return user;
+		return jpaUser;
 	}
 	
-	@PostMapping("/users")
-	public ResponseEntity saveUsers(@Validated @RequestBody User user){
-		User savedUser =  userService.save(user);
+	@PostMapping("/jpa/Users")
+	public ResponseEntity saveJPAUsers(@Validated @RequestBody JPAUser JPAUser){
+		JPAUser savedJPAUser =  userRepository.save(JPAUser);
 		
 		URI location = ServletUriComponentsBuilder
 			.fromCurrentRequest()
 			.path("/{id}")
-			.buildAndExpand(savedUser.getId()).toUri();
+			.buildAndExpand(savedJPAUser.getId()).toUri();
 		
 		return ResponseEntity.created(location).build();
 		
 	}
 	
-	@DeleteMapping("/users/{id}")
-	public void deleteUser(@PathVariable int id){
-		User user = userService.delete(id);
-		if(user == null)
-			throw new UserNotFoundException("id-"+id);
+	@DeleteMapping("/jpa/Users/{id}")
+	public void deleteJPAUser(@PathVariable int id){
+		userRepository.deleteById(id);
 	}
-
 }

@@ -12,7 +12,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description="User Details")
-public class User { 
+@Entity
+public class JPAUser { 
 	@Id
 	@GeneratedValue
 	private Integer id;
@@ -28,7 +29,7 @@ public class User {
 	private Date dob;
 	
 	
-	public User(Integer id, String first, String last, Date dob) {
+	public JPAUser(Integer id, String first, String last, Date dob) {
 		this.id = id;
 		this.first = first;
 		this.last = last;
@@ -38,7 +39,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", first=" + first + ", last=" + last + ", dob=" + dob + "]";
 	}
-	public User() {
+	public JPAUser() {
 	}
 	public Integer getId() {
 		return id;
